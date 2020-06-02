@@ -8,7 +8,7 @@ use Xiaofan\Pay\Exceptions\InvalidArgumentException;
 use Xiaofan\Pay\Exceptions\InvalidConfigException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Alipay;
-use Xiaofan\Supports\Collection;
+use Yansongda\Supports\Collection;
 
 class PosGateway extends Gateway
 {

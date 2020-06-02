@@ -4,7 +4,7 @@ namespace Xiaofan\Pay\Gateways\Alipay;
 
 use Xiaofan\Pay\Contracts\GatewayInterface;
 use Xiaofan\Pay\Exceptions\InvalidArgumentException;
-use Xiaofan\Supports\Collection;
+use Yansongda\Supports\Collection;
 
 abstract class Gateway implements GatewayInterface
 {

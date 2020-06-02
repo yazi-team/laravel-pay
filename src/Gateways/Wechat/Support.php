@@ -10,10 +10,10 @@ use Xiaofan\Pay\Exceptions\InvalidArgumentException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Wechat;
 use Xiaofan\Pay\Log;
-use Xiaofan\Supports\Collection;
-use Xiaofan\Supports\Config;
-use Xiaofan\Supports\Str;
-use Xiaofan\Supports\Traits\HasHttpRequest;
+use Yansongda\Supports\Collection;
+use Yansongda\Supports\Config;
+use Yansongda\Supports\Str;
+use Yansongda\Supports\Traits\HasHttpRequest;
 
 /**
  * @author yansongda <me@yansongda.cn>

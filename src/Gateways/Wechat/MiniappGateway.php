@@ -6,7 +6,7 @@ use Xiaofan\Pay\Exceptions\GatewayException;
 use Xiaofan\Pay\Exceptions\InvalidArgumentException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Wechat;
-use Xiaofan\Supports\Collection;
+use Yansongda\Supports\Collection;
 
 class MiniappGateway extends MpGateway
 {

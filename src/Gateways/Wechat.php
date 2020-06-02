@@ -15,9 +15,9 @@ use Xiaofan\Pay\Exceptions\InvalidGatewayException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Wechat\Support;
 use Xiaofan\Pay\Log;
-use Xiaofan\Supports\Collection;
-use Xiaofan\Supports\Config;
-use Xiaofan\Supports\Str;
+use Yansongda\Supports\Collection;
+use Yansongda\Supports\Config;
+use Yansongda\Supports\Str;
 
 /**
  * @method Response         app(array $config)          APP 支付

@@ -10,7 +10,7 @@ use Xiaofan\Pay\Exceptions\GatewayException;
 use Xiaofan\Pay\Exceptions\InvalidArgumentException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Wechat;
-use Xiaofan\Supports\Str;
+use Yansongda\Supports\Str;
 
 class AppGateway extends Gateway
 {

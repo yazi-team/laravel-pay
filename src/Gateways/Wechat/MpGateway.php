@@ -7,8 +7,8 @@ use Xiaofan\Pay\Events;
 use Xiaofan\Pay\Exceptions\GatewayException;
 use Xiaofan\Pay\Exceptions\InvalidArgumentException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
-use Xiaofan\Supports\Collection;
-use Xiaofan\Supports\Str;
+use Yansongda\Supports\Collection;
+use Yansongda\Supports\Str;
 
 class MpGateway extends Gateway
 {

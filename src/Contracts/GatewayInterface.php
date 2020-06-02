@@ -3,7 +3,7 @@
 namespace Xiaofan\Pay\Contracts;
 
 use Symfony\Component\HttpFoundation\Response;
-use Xiaofan\Supports\Collection;
+use Yansongda\Supports\Collection;
 
 interface GatewayInterface
 {

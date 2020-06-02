@@ -13,9 +13,9 @@ use Xiaofan\Pay\Exceptions\InvalidConfigException;
 use Xiaofan\Pay\Exceptions\InvalidGatewayException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Xiaofan\Pay\Gateways\Alipay\Support;
-use Xiaofan\Supports\Collection;
-use Xiaofan\Supports\Config;
-use Xiaofan\Supports\Str;
+use Yansongda\Supports\Collection;
+use Yansongda\Supports\Config;
+use Yansongda\Supports\Str;
 
 /**
  * @method Response   app(array $config)      APP 支付

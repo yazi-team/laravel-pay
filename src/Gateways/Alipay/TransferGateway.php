@@ -7,7 +7,7 @@ use Xiaofan\Pay\Events;
 use Xiaofan\Pay\Exceptions\GatewayException;
 use Xiaofan\Pay\Exceptions\InvalidConfigException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
-use Xiaofan\Supports\Collection;
+use Yansongda\Supports\Collection;
 
 class TransferGateway implements GatewayInterface
 {
