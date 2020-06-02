@@ -1,6 +1,6 @@
 <?php
 
-namespace Xiaofan\LaravelPay\Facades;
+namespace Xiaofan\Pay\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Xiaofan\Pay\Gateways\Alipay;
