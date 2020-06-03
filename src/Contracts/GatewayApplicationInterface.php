@@ -4,6 +4,7 @@ namespace Xiaofan\Pay\Contracts;
 
 use Symfony\Component\HttpFoundation\Response;
 use Yansongda\Supports\Collection;
+use Xiaofan\Pay\Contracts\Payable;
 
 interface GatewayApplicationInterface
 {
@@ -13,11 +14,11 @@ interface GatewayApplicationInterface
      * @author yansongda <me@yansonga.cn>
      *
      * @param string $gateway
-     * @param array  $params
+     * @param array  $charge
      *
      * @return Collection|Response
      */
-    public function pay($gateway, $params);
+    public function pay($gateway, Payable $charge);
 
     /**
      * Query an order.
