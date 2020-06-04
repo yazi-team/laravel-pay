@@ -135,7 +135,7 @@ class Jiupay implements GatewayApplicationInterface {
      */
     public function pay($gateway, Payable $charge) {
 //        Events::dispatch(new Events\PayStarting('Jiupay', $gateway, $params));
-        $request = new Request();
+        $request = app('request');
         $request->setTrustedProxies($request->getClientIps(), Request::HEADER_X_FORWARDED_ALL);
         $this->payload['pay_orderid'] = $charge->getTradeNo();
         $this->payload['pay_amount'] = sprintf("%.2f", intval($charge->getAmount()) / 100);
