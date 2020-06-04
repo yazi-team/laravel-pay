@@ -127,17 +127,19 @@ class Yinhai implements GatewayApplicationInterface {
      */
     public function pay($gateway, Payable $charge) {
 //        Events::dispatch(new Events\PayStarting('Yinhai', $gateway, $params));
+        $request = new Request();
+        $request->setTrustedProxies($request->getClientIps(), Request::HEADER_X_FORWARDED_ALL);
         $this->payload['order_sn'] = $charge->getTradeNo();
         $this->payload['money'] = sprintf("%.2f", intval($charge->getAmount()) / 100);
         $this->payload['goods_desc'] = $charge->getBody();
         $this->payload['time'] = time();
         $this->payload['ptype'] = Support::getPayType($charge->getExtra("method"));
         $this->payload['format'] = 'json';
-        $this->payload['client_ip'] = app('request')->getClientIp();
+        $this->payload['client_ip'] = $request->getClientIp();
         $this->payload['sign'] = Support::generateSign($this->payload);
 //        dump($this->payload);die;
         $gateway = get_class($this) . '\\' . Str::studly($gateway) . 'Gateway';
-
+        \Illuminate\Support\Facades\Log::info($gateway);
         if (class_exists($gateway)) {
             return $this->makePay($gateway);
         }
