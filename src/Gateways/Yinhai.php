@@ -52,9 +52,9 @@ class Yinhai implements GatewayApplicationInterface {
      * Const url.
      */
     const URL = [
-        self::MODE_NORMAL => 'http://www.banjiagouwu.com/?c=Pay',
-        self::MODE_DEV => 'http://www.banjiagouwu.com/?c=Pay',
-        self::MODE_QUERY => 'http://www.banjiagouwu.com/?c=Pay&a=query',
+        self::MODE_NORMAL => 'https://www.banjiagouwu.com/?c=Pay',
+        self::MODE_DEV => 'https://www.banjiagouwu.com/?c=Pay',
+        self::MODE_QUERY => 'https://www.banjiagouwu.com/?c=Pay&a=query',
     ];
 
     /**
