@@ -185,7 +185,7 @@ class Yongli implements GatewayApplicationInterface {
                     $data['order_id'],
                     0, 
                     intval($data['orderstatus']) === 1, 
-                    timeToStr($data['endtime']), $data);
+                    date("Y-m-d H:i:s", $data['endtime']), $data);
         }
 
         Events::dispatch(new Events\SignFailed('Yongli', '', $data));
