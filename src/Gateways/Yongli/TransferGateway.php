@@ -23,7 +23,7 @@ class TransferGateway implements GatewayInterface
      * @throws InvalidConfigException
      * @throws InvalidSignException
      */
-    public function pay($endpoint, array $payload): Collection
+    public function pay($endpoint, array $payload)
     {
         $result = Support::requestApi($payload);
         if (empty($result)) {

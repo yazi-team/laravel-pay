@@ -52,8 +52,6 @@ class Yongli implements GatewayApplicationInterface {
      * Const url.
      */
     const URL = [
-        self::MODE_NORMAL => 'https://www.banjiagouwu.com/?c=Pay',
-        self::MODE_DEV => 'https://www.banjiagouwu.com/?c=Pay',
         self::MODE_QUERY => 'http://yl.yonglidf01.com/index/api/transfer',
         self::MODE_TRANSFER => 'http://yl.yonglidf01.com/index/api/transfer',
         self::MODE_TRANSFER_QUERY => 'http://yl.yonglidf01.com/index/api/transfer',
