@@ -29,7 +29,7 @@ class TransferGateway implements GatewayInterface
     {
         $result = Support::requestApi($payload);
         if (empty($result)) {
-            return true;
+            throw new Exception('请求失败', $result);
         }
         if (isset($result['code']) && $result['code'] != 0) {
             Log::error("YongLiTransferRequestError", $result->toArray());

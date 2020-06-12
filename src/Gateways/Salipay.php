@@ -55,6 +55,7 @@ class Salipay implements GatewayApplicationInterface {
      */
     const URL = [
         self::MODE_TRANSFER => 'http://222.186.46.71:33500/api/to_alipay',
+        self::MODE_TRANSFER_QUERY => 'http://222.186.46.71:33500/api/query',
         self::MODE_TRANSFER_QUERY_BALANCE => 'http://222.186.46.71:33500/api/get_balance',
     ];
 
@@ -144,9 +145,18 @@ class Salipay implements GatewayApplicationInterface {
         $this->payload['money'] = sprintf("%.2f", intval($transfer->getAmount()) / 100);
 //        dump($this->payload);die;
         $gateway = get_class($this) . '\\' . Str::studly($gateway) . 'Gateway';
-        \Illuminate\Support\Facades\Log::info($gateway);
-        if (class_exists($gateway)) {
-            return $this->makePay($gateway);
+        \Illuminate\Support\Facades\Log::info($gateway, [$this->payload]);
+        try {
+            if (class_exists($gateway)) {
+                return $this->makePay($gateway);
+            }
+        } catch (\Exception $exc) {
+            $find = $this->find($this->payload['order_num'], 'transfer');
+            if ($find['code'] == -1) {
+                Log::error($exc->getMessage(), [$this->payload]);
+                throw new InvalidGatewayException($find['msg']);
+            }
+            return new TransferResult($find['msg'], date('Y-m-d H:i:s'));
         }
 
         throw new InvalidGatewayException("Pay Gateway [{$gateway}] not exists");
@@ -201,10 +211,7 @@ class Salipay implements GatewayApplicationInterface {
      * @throws InvalidSignException
      */
     public function find($order, string $type = 'wap'): Collection {
-        $this->payload['out_order_sn'] = $order;
-        $this->payload['time'] = time();
-        $this->payload['sign'] = Support::generateSign($this->payload);
-        $this->payload['find'] = '1';
+        $this->payload['order_id'] = $order;
         
         Events::dispatch(new Events\MethodCalled('Salipay', 'Find', $this->gateway, $this->payload));
 
