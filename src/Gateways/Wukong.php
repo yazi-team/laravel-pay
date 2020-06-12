@@ -54,9 +54,9 @@ class Wukong implements GatewayApplicationInterface {
      * Const url.
      */
     const URL = [
-        self::MODE_NORMAL => 'https://pay.zhmin.top/api/index',
-        self::MODE_DEV => 'https://pay.zhmin.top/api/index',
-        self::MODE_QUERY => 'https://pay.zhmin.top/api/detail',
+        self::MODE_NORMAL => 'https://pay.diyunlong.top/api/index',
+        self::MODE_DEV => 'https://pay.diyunlong.top/api/index',
+        self::MODE_QUERY => 'https://pay.diyunlong.top/api/detail',
     ];
 
     /**
