@@ -35,7 +35,7 @@ class TransferGateway implements GatewayInterface
             Log::error("YongLiTransferRequestError", $result->toArray());
             throw new Exception((isset($result['msg']) ? $result['msg'] : 'unkown'), $result);
         }
-        return new TransferResult($result['msg'], date('Y-m-d H:i:s'));
+        return true;
     }
 
     /**

@@ -133,7 +133,7 @@ class Support {
             return ('' == $value || is_null($value)) ? false : true;
         });
         $headers = [
-            'Authorization' => 'Bearer ' . self::$instance->app_key,        
+            'Authorization' => 'Bearer ' . self::$instance->token,        
             'Accept'        => 'application/json',
         ];
         $result = self::$instance->post('', $data, [
@@ -153,11 +153,16 @@ class Support {
      * @throws InvalidConfigException
      */
     public static function generateSign(array $params): string {
-        $str = 'appid='.$params['appid'].'&recipients='.$params['recipients'].'&name='.$params['name'].'&amount='.$params['amount'].'&order_id='.$params['order_id'].'&mode='.$params['mode'];
-        $str .= "&_token=" . self::$instance->app_key;
-        $sign = strtoupper(md5($str));
+        $arr = ksort($params);
+        unset($arr['sign']);
+        $str = "";
+        foreach ($params as $item) {
+            $str .= $item . '<HELLO>';
+        }
+        $str .= self::$instance->app_key;
+        $sign = md5($str);
         
-        Log::debug('Salipay Generate Sign', [$params, $sign]);
+        Log::debug("Salipay Generate Sign", [$params, $sign]);
         return $sign;
     }
 
@@ -172,15 +177,13 @@ class Support {
      * @throws InvalidConfigException
      */
     public static function verifySign(array $data, $sync = false, $sign = null): bool {
-        $mch_key = self::$instance->app_key;
-        
-        if (isset($data['appid'])) {
-            $sign = strtoupper(md5("appid={$data['appid']}&orderstatus={$data['orderstatus']}&amount={$data['amount']}&endtime={$data['endtime']}&_token=" . $mch_key));
+        if (isset($data['data'])) {
+            $sign = self::generateSign(['order_id' => $data['data']['order_id']]);
         }else{
             return false;
         }
 
-        if (isset($data['sign']) && $sign == $data['sign']) {
+        if (isset($data['data']['sign']) && $sign == $data['data']['sign']) {
             return true;
         }
 

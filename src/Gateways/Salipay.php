@@ -83,7 +83,7 @@ class Salipay implements GatewayApplicationInterface {
     public function __construct(Config $config) {
         $this->gateway = Support::create($config)->getBaseUri();
         $this->payload = [
-            'scene' => $config->get('app_id'),
+//            'scene' => $config->get('app_id'),
 //            'notify_url' => $config->get('notify_url'),
         ];
     }
@@ -143,20 +143,12 @@ class Salipay implements GatewayApplicationInterface {
         $this->payload['account'] = $transfer->getAccount();
         $this->payload['name'] = $transfer->getRealName();
         $this->payload['money'] = sprintf("%.2f", intval($transfer->getAmount()) / 100);
+        $this->payload['sign'] = Support::generateSign($this->payload);
 //        dump($this->payload);die;
         $gateway = get_class($this) . '\\' . Str::studly($gateway) . 'Gateway';
         \Illuminate\Support\Facades\Log::info($gateway, [$this->payload]);
-        try {
-            if (class_exists($gateway)) {
-                return $this->makePay($gateway);
-            }
-        } catch (\Exception $exc) {
-            $find = $this->find($this->payload['order_num'], 'transfer');
-            if ($find['code'] == -1) {
-                Log::error($exc->getMessage(), [$this->payload]);
-                throw new InvalidGatewayException($find['msg']);
-            }
-            return new TransferResult($find['msg'], date('Y-m-d H:i:s'));
+        if (class_exists($gateway)) {
+            return $this->makePay($gateway);
         }
 
         throw new InvalidGatewayException("Pay Gateway [{$gateway}] not exists");
@@ -174,24 +166,24 @@ class Salipay implements GatewayApplicationInterface {
      */
     public function verify($data = null, bool $refund = false): PurchaseResult {
         if (is_null($data)) {
-            $request = Request::createFromGlobals();
-
-            $data = $request->request->count() > 0 ? $request->request->all() : $request->query->all();
+            $request = new Request();
+            $content = $request->getContent();
+            $data = json_decode($content, true);
         }
 
         Events::dispatch(new Events\RequestReceived('Salipay', '', $data));
-
+        
+        \Illuminate\Support\Facades\Log::info("Salipay notify data:", [$data]);
         if (Support::verifySign($data)) {
-//            $find = $this->find($data['out_biz_no']);
-            $data['err_msg'] = isset($data['apiremark']) ? $data['apiremark'] : '';
-            $data['order_id'] = isset($data['order_id']) ? $data['order_id'] : '';
-            $data['status'] = intval($data['orderstatus']);
+            $order_id = $data['data']['order_id'];
+            $find = $this->find($order_id);
+            $data['err_msg'] = isset($data['msg']) ? $data['msg'] : '';
             return new PurchaseResult('yongli', 
-                    $data['out_biz_no'], 
-                    $data['order_id'],
+                    $order_id, 
+                    $order_id,
                     0, 
-                    intval($data['orderstatus']) === 1, 
-                    date("Y-m-d H:i:s", $data['endtime']), $data);
+                    intval($find['data']) === 1, 
+                    date("Y-m-d H:i:s"), $data);
         }
 
         Events::dispatch(new Events\SignFailed('Salipay', '', $data));
