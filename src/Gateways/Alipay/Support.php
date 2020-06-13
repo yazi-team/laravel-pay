@@ -203,7 +203,7 @@ class Support
         }
 
         if (Str::endsWith($publicKey, '.crt')) {
-            $publicKey = file_get_contents($publicKey);
+            $publicKey = file_get_contents(base_path($publicKey));
         } elseif (Str::endsWith($publicKey, '.pem')) {
             $publicKey = openssl_pkey_get_public(
                 Str::startsWith($publicKey, 'file://') ? $publicKey : 'file://'.$publicKey
@@ -400,7 +400,7 @@ class Support
         $method = str_replace('.', '_', $data['method']).'_response';
 
         if (!isset($result['sign']) || '10000' != $result[$method]['code']) {
-            throw new GatewayException('Get Alipay API Error:'.$result[$method]['msg'].(isset($result[$method]['sub_code']) ? (' - '.$result[$method]['sub_code']) : ''), $result);
+            throw new GatewayException('Alipay Error:'.(isset($result[$method]['sub_code']) ? ($result[$method]['sub_code']) : '') . (isset($result[$method]['sub_msg']) ? (' - '.$result[$method]['sub_msg']) : ''), $result);
         }
 
         if (self::verifySign($result[$method], true, $result['sign'])) {

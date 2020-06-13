@@ -16,12 +16,12 @@ use Xiaofan\Pay\Gateways\Alipay\Support;
 use Yansongda\Supports\Collection;
 use Yansongda\Supports\Config;
 use Yansongda\Supports\Str;
+use Xiaofan\Pay\Contracts\Transferable;
 
 /**
  * @method Response   app(array $config)      APP 支付
  * @method Collection pos(array $config)      刷卡支付
  * @method Collection scan(array $config)     扫码支付
- * @method Collection transfer(array $config) 帐户转账
  * @method Response   wap(array $config)      手机网站支付
  * @method Response   web(array $config)      电脑支付
  * @method Collection mini(array $config)     小程序支付
@@ -37,6 +37,7 @@ class Alipay implements GatewayApplicationInterface
      * Const mode_dev.
      */
     const MODE_DEV = 'dev';
+    const MODE_TRANSFER = 'transfer';
 
     /**
      * Const mode_service.
@@ -49,6 +50,7 @@ class Alipay implements GatewayApplicationInterface
     const URL = [
         self::MODE_NORMAL => 'https://openapi.alipay.com/gateway.do?charset=utf-8',
         self::MODE_DEV => 'https://openapi.alipaydev.com/gateway.do?charset=utf-8',
+        self::MODE_TRANSFER => 'https://openapi.alipay.com/gateway.do?charset=utf-8',
     ];
 
     /**
@@ -98,8 +100,8 @@ class Alipay implements GatewayApplicationInterface
         ];
 
         if ($config->get('app_cert_public_key') && $config->get('alipay_root_cert')) {
-            $this->payload['app_cert_sn'] = Support::getCertSN($config->get('app_cert_public_key'));
-            $this->payload['alipay_root_cert_sn'] = Support::getRootCertSN($config->get('alipay_root_cert'));
+            $this->payload['app_cert_sn'] = Support::getCertSN(base_path($config->get('app_cert_public_key')));
+            $this->payload['alipay_root_cert_sn'] = Support::getRootCertSN(base_path($config->get('alipay_root_cert')));
         }
     }
 
@@ -128,6 +130,45 @@ class Alipay implements GatewayApplicationInterface
         return $this->pay($method, ...$params);
     }
 
+    /**
+     * Pay an order.
+     *
+     * @author yansongda <me@yansongda.cn>
+     *
+     * @param array  $transfer
+     *
+     * @throws InvalidGatewayException
+     *
+     * @return Response|Collection
+     */
+    public function transfer(Transferable $transfer) {
+        $gateway = 'transfer';
+        $request = app('request');
+        $request->setTrustedProxies($request->getClientIps(), Request::HEADER_X_FORWARDED_ALL);
+        
+        $bizContent = array_filter([
+            'out_biz_no'      => $transfer->getTransferNo(),
+            'product_code'      => 'TRANS_ACCOUNT_NO_PWD',
+            'biz_scene'      => 'DIRECT_TRANSFER',
+            'payee_info'   => [
+                "identity" => $transfer->getAccount(),
+                'identity_type' => 'ALIPAY_LOGON_ID',
+                'name' => $transfer->getRealName(),
+            ],
+            'trans_amount'          => $transfer->getAmount() / 100,
+            'remark'          => $transfer->getRemark()
+        ]);
+        
+        $this->payload['biz_content'] = json_encode($bizContent);
+//        dump($this->payload);die;
+        $gateway = get_class($this) . '\\' . Str::studly($gateway) . 'Gateway';
+        \Illuminate\Support\Facades\Log::info($gateway);
+        if (class_exists($gateway)) {
+            return $this->makePay($gateway);
+        }
+
+        throw new InvalidGatewayException("Pay Gateway [{$gateway}] not exists");
+    }
     /**
      * Pay an order.
      *

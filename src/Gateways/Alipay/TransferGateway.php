@@ -8,6 +8,7 @@ use Xiaofan\Pay\Exceptions\GatewayException;
 use Xiaofan\Pay\Exceptions\InvalidConfigException;
 use Xiaofan\Pay\Exceptions\InvalidSignException;
 use Yansongda\Supports\Collection;
+use Xiaofan\Pay\Entity\TransferResult;
 
 class TransferGateway implements GatewayInterface
 {
@@ -22,14 +23,16 @@ class TransferGateway implements GatewayInterface
      * @throws InvalidConfigException
      * @throws InvalidSignException
      */
-    public function pay($endpoint, array $payload): Collection
+    public function pay($endpoint, array $payload)
     {
         $payload['method'] = 'alipay.fund.trans.uni.transfer';
         $payload['sign'] = Support::generateSign($payload);
-
+        
         Events::dispatch(new Events\PayStarted('Alipay', 'Transfer', $endpoint, $payload));
-
-        return Support::requestApi($payload);
+        
+        $result = Support::requestApi($payload);
+        
+        return new TransferResult($result['order_id'],  $result['trans_date']);
     }
 
     /**
