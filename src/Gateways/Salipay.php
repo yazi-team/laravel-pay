@@ -154,7 +154,7 @@ class Salipay implements GatewayApplicationInterface {
         } catch (\Exception $exc) {
             $find = $this->find($this->payload['order_num'], 'transfer');
             if ($find['code'] == -1) {
-                Log::error($exc->getMessage(), [$this->payload]);
+                \Illuminate\Support\Facades\Log::error($exc->getMessage(), [$this->payload]);
                 throw new InvalidGatewayException($find['msg']);
             }
             return true;

@@ -153,11 +153,11 @@ class Support {
      * @throws InvalidConfigException
      */
     public static function generateSign(array $params): string {
-        $arr = ksort($params);
-        unset($arr['sign']);
+        unset($params['sign']);
+        ksort($params);
         $str = "";
         foreach ($params as $item) {
-            $str .= $item . '<HELLO>';
+            $str .= $item . "&";
         }
         $str .= self::$instance->app_key;
         $sign = md5($str);
