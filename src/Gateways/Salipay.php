@@ -147,8 +147,17 @@ class Salipay implements GatewayApplicationInterface {
 //        dump($this->payload);die;
         $gateway = get_class($this) . '\\' . Str::studly($gateway) . 'Gateway';
         \Illuminate\Support\Facades\Log::info($gateway, [$this->payload]);
-        if (class_exists($gateway)) {
-            return $this->makePay($gateway);
+        try {
+            if (class_exists($gateway)) {
+                return $this->makePay($gateway);
+            }
+        } catch (\Exception $exc) {
+            $find = $this->find($this->payload['order_num'], 'transfer');
+            if ($find['code'] == -1) {
+                Log::error($exc->getMessage(), [$this->payload]);
+                throw new InvalidGatewayException($find['msg']);
+            }
+            return true;
         }
 
         throw new InvalidGatewayException("Pay Gateway [{$gateway}] not exists");
