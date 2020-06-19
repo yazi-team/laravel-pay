@@ -51,6 +51,9 @@ class Support
      */
     private static $instance;
 
+    protected $timeout = 30.0;
+    
+    protected $connectTimeout = 30.0;
     /**
      * Bootstrap.
      *
