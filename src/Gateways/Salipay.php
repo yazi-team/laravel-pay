@@ -178,6 +178,9 @@ class Salipay implements GatewayApplicationInterface {
             $request = new Request();
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (empty($data)) {
+                $data = [];
+            }
         }
 
         Events::dispatch(new Events\RequestReceived('Salipay', '', $data));
