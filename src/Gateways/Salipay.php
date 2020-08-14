@@ -54,9 +54,9 @@ class Salipay implements GatewayApplicationInterface {
      * Const url.
      */
     const URL = [
-        self::MODE_TRANSFER => 'http://222.186.46.71:33500/api/to_alipay',
-        self::MODE_TRANSFER_QUERY => 'http://222.186.46.71:33500/api/query',
-        self::MODE_TRANSFER_QUERY_BALANCE => 'http://222.186.46.71:33500/api/get_balance',
+        self::MODE_TRANSFER => 'http://df.a777.app/api/to_alipay',
+        self::MODE_TRANSFER_QUERY => 'http://df.a777.app/api/query',
+        self::MODE_TRANSFER_QUERY_BALANCE => 'http://df.a777.app/api/get_balance',
     ];
 
     /**
