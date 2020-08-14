@@ -142,6 +142,9 @@ class Support {
         $result = self::$instance->post('', $data, [
             'headers' => $headers
         ]);
+        if (!is_array($result)) {
+            $result = (array)json_decode($result, true);
+        }
         Log::debug('Salipay requestApi Content', [$result]);
         Events::dispatch(new Events\ApiRequested('Salipay', '', self::$instance->getBaseUri(), $result));
 
