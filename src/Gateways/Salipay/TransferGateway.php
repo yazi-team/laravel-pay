@@ -32,7 +32,7 @@ class TransferGateway implements GatewayInterface
             throw new Exception('请求失败', $result);
         }
         if (isset($result['code']) && $result['code'] != 0) {
-            if ($result['msg'] != '订单重复') {
+            if ($result['msg'] != '订单重复' && $result['msg'] != '订单重复了') {
                 Log::error("YongLiTransferRequestError", $result->toArray());
                 throw new Exception((isset($result['msg']) ? $result['msg'] : 'unkown'), $result);
             }
